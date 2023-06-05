@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Display XML Data</title>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script>
+    $(document).ready(function() {
+      // Make an AJAX request to fetch the XML data
+      $.ajax({
+        url: "https://clarin.ids-mannheim.de/standards/rest/data/recommendations/IDS-recommendation.xml",
+        type: "GET",
+        dataType: "xml",
+        success: function(xml) {
+          // Parse the XML data and display it on the page
+          var xmlDoc = $(xml);
+          var centre = xmlDoc.find("centre").text();
+          $("#centre").html(centre);
+          
+          var browserLang = navigator.language.substring(0, 2);
+          var infoElement = xmlDoc.find("info[xml\\:lang='" + browserLang + "']");
+          infoElement.children().each(function(){
+        	  var t = $(this).text();
+        	  $("#info").append($("<p style='margin-bottom: 10px;'>"+t+"</p>"));
+          });
+          
+          var table = $("<table style='width:90%';>");
+ 		  table.append("<tr><th style='border-bottom: 1px solid black;'>Format</th><th style='border-bottom: 1px solid black;'>Domain</th><th style='border-bottom: 1px solid black;'>Level</th></tr>");
+          xmlDoc.find("format").each(function() {
+        	    var id = $(this).attr("id").substring(1);
+        	    var domain = $(this).find("domain").text();
+        	    var level = $(this).find("level").text();
+        	    var row = $("<tr><td>" + id + "</td><td>" + domain + "</td><td>" + level + "</td></tr>");
+        	    table.append(row);
+        	  });
+          $("#formats").append(table)
+        },
+        error: function() {
+          $("#error").html("Error loading XML data.");
+        }
+      });
+    });
+  </script>
+  <style>
+  	body{margin-left:auto; margin-right:auto; width:50%}
+  	div {margin-top: 20px; margin-bottom: 20px;}
+  </style>
+</head>
+<body>
+  <div style="font-size:18px; font-weight:bold"> 
+  	<span id="centre"></span> Recommendation 
+  </div>
+  <div id="info"></div>
+  <div id="formats"></div>
+  <div id="error"></div>
+</body>
+</html>
