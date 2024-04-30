@@ -13,7 +13,7 @@
         success: function(xml) {
           // Parse the XML data and display it on the page
           var xmlDoc = $(xml);
-          var centre = xmlDoc.find("centre").text();
+          var centre = xmlDoc.find("centre > name").text();
           $("#centre").html(centre);
           
           var browserLang = navigator.language.substring(0, 2);
@@ -23,13 +23,13 @@
         	  $("#info").append($("<p style='margin-bottom: 10px;'>"+t+"</p>"));
           });
           
-          var table = $("<table style='width:90%';>");
- 		  table.append("<tr><th style='border-bottom: 1px solid black;'>Format</th><th style='border-bottom: 1px solid black;'>Domain</th><th style='border-bottom: 1px solid black;'>Level</th></tr>");
+          var table = $("<table style='width:100%';>");
+ 		  table.append("<tr><th style='border-bottom: 2px solid #f6a800;'>Format</th><th style='border-bottom: 2px solid #f6a800;'>Domain</th><th style='border-bottom: 2px solid #f6a800;'>Level</th></tr>");
           xmlDoc.find("format").each(function() {
         	    var id = $(this).attr("id").substring(1);
         	    var domain = $(this).find("domain").text();
         	    var level = $(this).find("level").text();
-        	    var row = $("<tr><td>" + id + "</td><td>" + domain + "</td><td>" + level + "</td></tr>");
+        	    var row = $("<tr><td style='border-bottom: 1px solid grey;'>" + id + "</td><td style='border-bottom: 1px solid grey;'>" + domain + "</td><td style='border-bottom: 1px solid grey;'>" + level + "</td></tr>");
         	    table.append(row);
         	  });
           $("#formats").append(table)
@@ -41,13 +41,14 @@
     });
   </script>
   <style>
-  	body{margin-left:auto; margin-right:auto; width:50%}
+  	body{margin-left:auto; margin-right:auto; width:50%; font-size:14px;}
   	div {margin-top: 20px; margin-bottom: 20px;}
   </style>
 </head>
 <body>
-  <div style="font-size:18px; font-weight:bold"> 
-  	<span id="centre"></span> Recommendation 
+  <div style="font-size:20px; font-weight:bold"> 
+  	<span id="centre"></span> 
+  	<hr color="f6a800"/>
   </div>
   <div id="info"></div>
   <div id="formats"></div>
